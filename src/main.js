@@ -1,3 +1,4 @@
+const cluster = require('cluster');
 const express = require('express');
 const bodyParser = require('body-parser');
 
@@ -22,23 +23,23 @@ class Main {
     }
 }
 
-// cluster.on('start', function (worker) {
-//     Logger.info('Worker %d start :)', worker.id);
-// });
+cluster.on('start', function (worker) {
+    Logger.info('Worker %d start :)', worker.id);
+});
 
-// // Listen for dying workers
-// cluster.on('death', function (worker) {
-//     Logger.info('Worker %d died :(', worker.id);
+// Listen for dying workers
+cluster.on('death', function (worker) {
+    Logger.info('Worker %d died :(', worker.id);
 
-//     cluster.fork();
-// });
+    cluster.fork();
+});
 
-// if (cluster.isMaster && process.env.NODE_ENV !== 'local') {
-//     var cpuCount = require('os').cpus().length;
+if (cluster.isMaster && process.env.NODE_ENV !== 'local') {
+    var cpuCount = require('os').cpus().length;
 
-//     for (var i = 0; i < cpuCount; i += 1) {
-//         cluster.fork();
-//     }
-// } else {
+    for (var i = 0; i < cpuCount; i += 1) {
+        cluster.fork();
+    }
+} else {
     new Main();
-// }
+}

@@ -1,6 +1,14 @@
 # express-exercise
 REST API exercise using Express
 
+## setup
+
+```bash
+$ git clone https://github.com/egermano/express-exercise.git
+$ yarn install
+$ yarn start
+```
+
 ## Methods
 
 (running on localhost:8080)
