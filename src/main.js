@@ -22,4 +22,23 @@ class Main {
     }
 }
 
-new Main();
+cluster.on('start', function (worker) {
+    Logger.info('Worker %d start :)', worker.id);
+});
+
+// Listen for dying workers
+cluster.on('death', function (worker) {
+    Logger.info('Worker %d died :(', worker.id);
+
+    cluster.fork();
+});
+
+if (cluster.isMaster && process.env.NODE_ENV !== 'local') {
+    var cpuCount = require('os').cpus().length;
+
+    for (var i = 0; i < cpuCount; i += 1) {
+        cluster.fork();
+    }
+} else {
+    new Main();
+}
